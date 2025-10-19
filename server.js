@@ -6,14 +6,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:8081", "https://muhoroanthony.onrender.com"],
+  })
+);
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send({ message: "Hello from Anthony" });
 });
-
 
 // Email sender setup
 const transporter = nodemailer.createTransport({
@@ -110,7 +114,7 @@ const buildTemplate = ({ name, email, message, service }) => `
             <div class="detail-item">
                 <span class="detail-label">Message</span>
                 <div class="message-content">
-                    ${message.replace(/\n/g, '<br>')}
+                    ${message.replace(/\n/g, "<br>")}
                 </div>
             </div>
         </div>
@@ -222,14 +226,12 @@ app.post("/send-email", async (req, res) => {
   const { name, email, message, service } = req.body;
 
   if (!name || !email || !message || !service) {
-    return res.status(400).json({ success:false,
-      error: "Missing fields" });
+    return res.status(400).json({ success: false, error: "Missing fields" });
   }
 
   try {
     // Notify you
     await transporter.sendMail({
-      
       to: process.env.MY_EMAIL,
       subject: `New message for ${service}`,
       html: buildTemplate({ name, email, message, service }),
@@ -243,12 +245,14 @@ app.post("/send-email", async (req, res) => {
       html: autoReplyTemplate(name),
     });
 
-    res.status(200).json({ success: true,message:"Email sent successfully" });
+    res.status(200).json({ success: true, message: "Email sent successfully" });
   } catch (err) {
     console.error("Error sending email:", err);
-    res.status(500).json({ success:false,
-        
-        error: "Email failed to send" });
+    res.status(500).json({
+      success: false,
+
+      error: "Email failed to send",
+    });
   }
 });
 
