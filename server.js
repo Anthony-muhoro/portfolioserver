@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+// cors usage
 app.use(
   cors({
     origin: ["http://localhost:8081", "https://muhoroanthony.onrender.com"],
