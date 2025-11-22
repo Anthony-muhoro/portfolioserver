@@ -9,7 +9,7 @@ const app = express();
 // cors usage
 app.use(
   cors({
-    origin: ["http://localhost:8081","http://localhost:6679", "https://muhoroanthony.onrender.com"],
+    origin: ["http://localhost:8081","http://localhost:6679","https://muhoroanthony.wuaze.com", "https://muhoroanthony.onrender.com"],
   })
 );
 
